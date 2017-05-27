@@ -1,0 +1,96 @@
+<tagLib name="html" />
+<include file="Public:header" />
+  <div class="main-box">
+    <div class="container">
+      <div class="inside">
+        <div class="wrapper">
+        	<!-- aside -->
+          <aside>
+            <h2>联系<span>我们</span></h2>
+            <!-- .contacts -->
+            <ul class="contacts">
+            	<li><strong>邮编:</strong>710049</li>
+              <li><strong>国家:</strong>中国</li>
+              <li><strong>城市:</strong>西安-碑林区</li>
+              <li><strong>联系方式:</strong><a href="http://eeyes.net">http://eeyes.net</a></li>
+              <li><strong>QQ:</strong>190458588</li>
+              <li><strong>Email:</strong>190458588@qq.com</li>
+            </ul>
+            <!-- /.contacts -->
+            <!--<h3>关于我们:</h3>-->
+			
+            </aside>
+          <!-- content -->
+          <section id="content">
+            <article>
+            	<h2>请填写<span>意见</span></h2>
+              <form id="suggest-form" action="__URL__/suggestPost" method="post">
+                <fieldset>
+				  <div class="field">
+                    <label>请说:</label>
+                    <input type="text" name="usuggest" value=""/>(如果方便，可以将您的联系方式写到建议里，方便我回复).
+                  </div>
+                  <div><a id="register" href="#" onClick="suggestForm()">提交</a></div>
+                </fieldset>
+              </form>
+			  <div class = "notice">
+			  修正信息:<br/>1.2012年5月22号，添加修改用户信息功能。<br/>
+			  2.关于部分用户搜狗浏览器不能注册，请遇到这种情况的用户将搜狗详细版本号发送给我,谢谢合作。<br/>
+			  3.2012年5月31号，添加退票功能.<br/>
+			  提醒:<br/>
+			  
+			  1.短信功能暂时未启用,原因:由于注册用户比较多，使用个人飞信添加并不合适.请等待.<br/>
+			  2.请大家填写合理注册信息,对于不合理注册用户,我会定期手工清理,已清理的用户如下:<br/>
+			  <font color = 'red'>&nbsp;&nbsp;&nbsp;&nbsp;1acu93SZqF9V02、12,学号为3111**********2047,31116****,10052***,2110502***,08205***,10091***的用户。</font><br/>
+			  3.注册用户姓名处请填写真实姓名,不要使用学号或者昵称代替,请大家尽快修改.
+			  </div>
+            </article> 
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- footer -->
+  <footer>
+    <div class="container">
+    	<div class="wrapper">
+		友情链接：<a style="padding-left:15px;" href="http://www.xjtu.edu.cn">西安交通大学</a>
+		<a style="padding-left:15px;" href="http://tuanwei.tiaozhan.com">共青团西安交通大学委员会</a>
+        <a style="padding-left:15px;" href="http://www.tiaozhan.com">挑战网</a>
+		<a style="padding-left:15px;" href="http://grad.xjtu.edu.cn">硕博之窗</a>
+        
+        
+		<div class="fright"><a href="http://www.eeyes.net/" target="_blank">e瞳出品</a></div>
+      </div>
+    </div>
+  </footer>
+  <script>
+  function suggestForm() {
+    usuggest_ = $("[name='usuggest']").attr("value");
+    $.ajax({
+
+    type: "POST",
+
+    data:{usuggest:usuggest_},
+    
+    dataType:"json",
+    
+    url: "__URL__/suggestPost",
+
+    beforeSend: function(XMLHttpRequest) {
+            alert("您的建议已经提交,谢谢合作");
+    },
+    
+    success: function(data, textStatus){
+        if(textStatus == 'success') {
+            alert(data.res);
+        }
+        else {
+            alert("请求已经完成,不过,也许失败了...,哈哈."); 
+        }
+    }
+    });
+}
+  </script>
+</body>
+</html>

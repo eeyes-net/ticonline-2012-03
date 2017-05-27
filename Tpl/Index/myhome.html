@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>交大在线订票</title>
+<script>
+    function get_mydata(){
+        $.post("__URL__/get_mydata", {Action: "post"},
+		function (data3, textStatus){
+            alert("您的订票信息如下:<br/>"+data3);
+		});
+	};
+</script>
+</head>
+<body class="B_eventlist">
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+  <load href="__PUBLIC__/css/reset.css"/>
+  <load href="__PUBLIC__/css/style.css"/>
+  <load href="__PUBLIC__/css/style2.css"/>
+  <load href="__PUBLIC__/css/bootstrap.css"/>
+  <load href="__PUBLIC__/css/frame.css"/>
+  <load href="__PUBLIC__/css/sc_event_list.css"/>
+  <load href="__PUBLIC__/css/sc_event_list.css"/>
+  <load href="__PUBLIC__/js/jquery-1.8.3.min.js"/>
+  <load href="__PUBLIC__/js/scripts.js"/>
+  <load href="__PUBLIC__/js/menu.js"/>
+  <load href="__PUBLIC__/js/jquery.backgroundpos.js"/>
+<ul id="eeyes_header" style="position: static;">	
+	<a id="eeyes_ico" href="http://www.eeyes.net/" target="_blank"></a>	
+	<li><a href="http://www.eeyes.net/" target="_blank">首页</a></li>	
+	<li><a href="http://news.eeyes.net/" target="_blank">e瞳新闻</a></li>	
+	<li><a href="http://idv.eeyes.net/" target="_blank">爱影视</a></li>	
+	<li><a href="http://zhidao.eeyes.net/" target="_blank">交大知道</a></li>	
+	<li><a href="http://music.eeyes.net/" target="_blank">悦酷电台</a></li>	
+	<li><a href="http://qing.eeyes.net/" target="_blank">胭脂坡上</a></li>	
+	<li><a href="http://piao.eeyes.net/" target="_blank">在线订票</a></li>
+	<li><a href="http://go.eeyes.net/" target="_blank">交大导航</a></li>	
+	<li><a href="http://join.eeyes.net/" target="_blank">加入我们</a></li>	
+	<span style="float:right;">精彩有e瞳，美妙无异同！</span>
+</ul>
+<!--顶托-->
+<!--顶托-->
+    <div class="header" style="font-family:微软雅黑;">
+        <ul class="menu">
+            <li><a href="http://piao.eeyes.net" target="_self">首页</a></li>   
+	    {$isLogin}
+	    {$myhome}
+	</ul>
+        <a href="http://piao.eeyes.net">
+            <img title="大屏幕" class="miui_logo" src="http://piao.eeyes.net/images/logo1.png" alt="大屏幕" />
+	</a>
+    </div>
+<!--/顶托-->
+<!--/顶托-->
+<div style="background: #FFFFCD;float: left;font-size: 16px;border-radius: 10px;margin-left: 10%;padding: 10px;margin-top: 5px;margin-right: 10px;">
+	<ul style="font-family:微软雅黑;">
+		<h3 style="color:#fc6500;">我的信息</h3>
+		<li style="margin-top:10px;"><span style="font-weight:bold;">姓名：</span>{$myInfo.uname}</li>
+		<li style="margin-top:10px;"><span style="font-weight:bold;">学院：</span>{$myInfo.ucollege}</li>
+		<li style="margin-top:10px;"><span style="font-weight:bold;">学号：</span>{$myInfo.unum}</li>
+	</ul>
+</div>
+
+
+<div style="font-family:微软雅黑;margin-top:5px;font-family: 微软雅黑;background: #ffffcd;margin-left: 27%;margin-right: 10%;padding: 10px;border-radius: 4px;">
+<h3 style="color: #42B95E;">我的活动</h3>
+	<ul style="font-size:16px;margin-top:10px;margin-left:5%;">
+		<volist name="myTic" id="Ac">
+		<li style="margin-bottom:10px;border-bottom: 1px solid #b4b4b4;">{$Ac.actitle}:{$Ac.actime}--{$Ac.action}</li>
+		</volist>
+	</ul>
+</div>
+<!--div id="footer">
+	<div class="content">
+		<div class="word">© 2012-2017 e瞳网 eeYes .Net 版权所有	陕ICP备030061号</div>
+	</div>
+</div-->
+</body>
+</html>

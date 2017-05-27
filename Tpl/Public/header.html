@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>大屏幕</title>
+<script>
+	function get_tic(macid) {
+	    $.post("__URL__/get_tic", { Action: "post", acid:macid },
+		function (data, textStatus){
+		    
+			alert(data.msg);
+			if(data.returnmsg == 1) {
+				$("#detail").fadeOut(500);
+				$("#over_layer").hide();
+				window.location("__URL__/index");
+			}
+		},"json");
+		
+	};
+    
+	function return_tic(obj,acid) {
+		$.post("__URL__/return_tic", { Action: "post", acid: acid },
+		function (data, textStatus){
+			alert(data.msg);
+			if(data.returnmsg == '1') {
+				$("#acnow").hide();
+				$("#acnow").html(parseInt($("#acnow").html()) + parseInt(1));
+				$("#acnow").fadeIn("slow");
+				$(obj).parent().fadeOut();
+			}
+		},"json");
+		
+	};
+    function get_mydata(){
+        $.post("__URL__/get_mydata", {Action: "post"},
+		function (data3, textStatus){
+            alert("您的订票信息如下:<br/>"+data3);
+		});
+	};
+</script>
+</head>
+<body class="B_eventlist">
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+  <load href="__PUBLIC__/css/reset.css"/>
+  <load href="__PUBLIC__/css/style.css"/>
+  <load href="__PUBLIC__/css/style2.css"/>
+  <load href="__PUBLIC__/css/bootstrap.css"/>
+  <load href="__PUBLIC__/css/frame.css"/>
+  <load href="__PUBLIC__/css/sc_event_list.css"/>
+  <load href="__PUBLIC__/css/sc_event_list.css"/>
+  <load href="__PUBLIC__/js/jquery-1.8.3.min.js"/>
+  <load href="__PUBLIC__/js/scripts.js"/>
+  <load href="__PUBLIC__/js/menu.js"/>
+  <load href="__PUBLIC__/js/jquery.backgroundpos.js"/>
+<ul id="eeyes_header" style="position: static;">	
+	<a id="eeyes_ico" href="http://www.eeyes.net/" target="_blank"></a>	
+	<li><a href="http://www.eeyes.net/" target="_blank">首页</a></li>	
+	<li><a href="http://news.eeyes.net/" target="_blank">e瞳新闻</a></li>	
+	<li><a href="http://idv.eeyes.net/" target="_blank">爱影视</a></li>	
+	<li><a href="http://zhidao.eeyes.net/" target="_blank">交大知道</a></li>	
+	<li><a href="http://music.eeyes.net/" target="_blank">悦酷电台</a></li>	
+	<li><a href="http://qing.eeyes.net/" target="_blank">胭脂坡上</a></li>	
+	<li><a href="http://piao.eeyes.net/" target="_blank">大屏幕</a></li>
+	<li><a href="http://go.eeyes.net/" target="_blank">交大导航</a></li>	
+	<li><a href="http://join.eeyes.net/" target="_blank">加入我们</a></li>	
+	<span style="float:right;">精彩有e瞳，美妙无异同！</span>
+</ul>
+<!--顶托-->
+<!--顶托-->
+    <div class="header" style="font-family:微软雅黑;">
+        <ul class="menu">
+            <li class="current first"><a href="http://piao.eeyes.net" target="_self">首页</a></li>   
+	    <li class="li_3"><a class="noclick" href="#" target="_blank">活动分类</a>
+                <dl class="li_3_content">
+                    <dt></dt>
+                    <dd><a href="http://piao.eeyes.net/index.php/Index/index/typeid/0"><span>全部</span></a></dd>
+		<volist name="Typeinfolist" id="infoData">
+			<dd><a href="http://piao.eeyes.net/index.php/Index/index/typeid/{$infoData.tid}"><span>{$infoData.tname}</span></a></dd>
+		</volist>
+                </dl>
+        </li>
+	    {$myhome}
+	    {$isLogin}
+	</ul>
+        <a href="http://piao.eeyes.net">
+            <img title="大屏幕" class="miui_logo" src="http://piao.eeyes.net/images/logo1.png" alt="大屏幕" />
+	</a>
+    </div>
+<!--/顶托-->
+<!--/顶托-->
+
+<!--<div id="list">
+	<ul>
+		<li><a href="http://piao.eeyes.net/index.php/Index/index/typeid/0"><span>全部</span></a></li>
+		<volist name="Typeinfolist" id="infoData">
+			<li><a href="http://piao.eeyes.net/index.php/Index/index/typeid/{$infoData.tid}"><span>{$infoData.tname}</span></a></li>
+		</volist>
+	</ul>
+</div>-->
+			
+ <div id="header">
+	<div class="wrap"> 
+		<div id="slide-holder"> 
+			<div id="slide-runner"> 
+				<a><img id="slide-img-1" src="http://piao.eeyes.net/images/guinnes.jpg" class="slide" alt="" style="width:100%;height:375px;"/></a> 
+				<a><img id="slide-img-2" src="http://piao.eeyes.net/images/xjtustar.jpg" class="slide" alt=""  style="width:100%;height:375px;"/></a> 
+				<a><img id="slide-img-3" src="http://piao.eeyes.net/images/concert.jpg" class="slide" alt="" style="width:100%;height:375px;"/></a> 
+				<a><img id="slide-img-4" src="http://piao.eeyes.net/images/ke.jpg" class="slide" alt=""   style="width:100%;height:375px;"/></a> 
+				<a><img id="slide-img-5" src="http://piao.eeyes.net/images/zhidao.jpg" class="slide" alt=""  style="width:100%;height:375px;"/></a> 
+				<a><img id="slide-img-6" src="http://piao.eeyes.net/images/2buy.jpg" class="slide" alt=""   style="width:100%;height:375px;"/></a> 
+				<a><img id="slide-img-7" src="http://piao.eeyes.net/images/xjtustar.jpg" class="slide" alt=""  style="width:100%;height:375px;"/></a> 
+				
+			</div> 
+			<div id="slide-controls"> 
+					<p id="slide-client" class="text"><strong></strong><span></span></p> 
+					<p id="slide-desc" class="text"></p> 
+					<p id="slide-nav"></p> 
+			</div> 
+	<!--content featured gallery here --> 
+		</div> 
+   <script type="text/javascript"> 
+    if(!window.slider) var slider={};slider.data=[{"id":"slide-img-1","client":"第35届迎新晚会","desc":"欢聚的盛典"},
+    {"id":"slide-img-2","client":"新年音乐会","desc":"新年音乐会"},
+    {"id":"slide-img-3","client":"交大知道","desc":"分享你的智慧"},
+    {"id":"slide-img-4","client":"课程格子","desc":"课程格子"},
+    {"id":"slide-img-5","client":"交大知道","desc":"分享你的智慧"},
+    {"id":"slide-img-6","client":"二手市场","desc":"除了爱情什么都能卖"},
+    {"id":"slide-img-7","client":"第35届迎新晚会","desc":"欢聚的盛典"}];
+    </script>
+    </div>
+    </div>

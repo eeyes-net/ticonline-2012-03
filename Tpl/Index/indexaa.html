@@ -1,0 +1,191 @@
+<tagLib name="html" />
+<include file="Public:header" />
+<style>
+#info{
+border-radius: 5px;
+box-shadow: 4px 4px 3px #ccc;
+margin-bottom: 20px;
+line-height: 18px;
+font-family:微软雅黑;
+width:400px;
+float:left;
+padding-top:5px;
+min-height:150px;
+}
+.info_list{padding:5px;}
+</style>
+<div id="over_layer">
+	<iframe style="width:100%;height:100%;position:absolute;visibility:inherit;z-index:-1;" frameborder="0">
+		#document
+		<html>
+			<head></head>
+			<body></body>
+		</html>
+	</iframe>
+</div>
+
+<div id="detail">
+	<div style="height: 30px;background: #488fce;border-top-left-radius: 20px;border-top-right-radius: 20px;">
+		<div style="height:15px;"><a id="close" href="#"></a></div>
+	</div>
+	<div id="acnow" style="padding:30px;font-family:微软雅黑;font-size:14px;"></div>
+</div>
+<!--mainbg-->
+
+<div class="SC_mainbg" style="width:1145px;margin:0 auto;margin-top:30px;">
+    <div class="sc_mainbg_mid clearfix" id="pl_content_eventList" style="width:993px;margin:auto;">
+        <div class="sc_right_box" style="width:900px;">
+        	<!--列表页搜索-->
+            <div class="sc_search_list clearfix" style="width:900px;">
+	    </div>
+            <!--/列表页搜索-->
+            <!--列表内容-->
+		<div node-type="eventList"> 
+			<div id="showarea">
+				<div id="ac_detail">
+					<ul class="news">
+						<volist name="Acinfolist" id="Ac">
+							<li id="info">
+								<div class="info_list">
+									<figure><strong>{$Ac.acday}</strong>{$Ac.acmonth}</figure>
+									<h4><a  tid="{$Ac.acid}"  href="#">{$Ac.actitle}</a></h4>
+									<p>活动地点: {$Ac.acwhere}</p>
+									<p>活动时间：{$Ac.year}-{$Ac.acmonth}-{$Ac.acday}</p>
+									<p>活动类别：{$Ac.type}</p>
+									<p>检票（刷卡）：{$Ac.actic}</p>
+									<div>{$Ac.actext|msubstr=0,30,'utf-8',true}</div>
+								</div>
+								
+							</li>
+						</volist>
+					</ul>
+				</div>
+			</div>
+		</div>   
+        </div>
+    </div>
+    <div class="sc_mainbg_bott"></div>
+</div>
+<!--/mainbg-->
+<div style="display:block;float:right;" id="goTop">
+	<a style="cursor:pointer;text-decoration:none;color:#000;"><img src="/images/gotop.jpg"><span style="font-size:20px;font-family:微软雅黑;line-height:30px;">回到顶部</span></a>
+</div>
+<!--footer-->
+<!--footer-->
+<script src="http://www.eeyes.net/public/load.js"></script><script>$(eeyesLoad("hide"));</script>
+<div id="footer">
+	<div class="content">
+		<div class="word">© 2012-2017 e瞳网 eeYes .Net 版权所有	陕ICP备030061号 
+			<a href="http://tongji.baidu.com/hm-web/welcome/ico?s=2b48204fe5fc74209e567ac3ff5d3a9e" target="_blank">百度统计</a>
+		</div>
+	</div>
+</div>
+<script>
+	$("#goTop").bind('click',function(){
+		$("body").animate({scrollTop:0},1500);
+	});
+	$("ul.part2menu > li").click(function(){
+		$(this).parent().find("li").removeClass("leftmenuchosed");
+		$(this).addClass("leftmenuchosed");
+	});
+	$("ul.clearfix > li > a").click(function(){
+		$(this).parent().parent().find("li").removeClass("current");
+		$(this).parent().addClass("current");
+	});
+	$("ul.news").find("a").click(function(){
+		$("#over_layer").show();
+		var temp=this;
+		$("#detail").fadeIn(500,function(){  
+			$.post("__URL__/get_acinfo", {Action: "post", id: $(temp).attr("tid") },
+				function (data, textStatus){
+				$("#acnow").html("<h2><span id = 'actitle'>"+data.actitle+"</span></h2>"+"<div id='achead'><ul style='float:left;'><li>主办社团:"+data.acsource+"&nbsp;&nbsp;&nbsp</li><li>开抢时间:"+data.acstart+" &nbsp;&nbsp;&nbsp</li><li>活动时间:<span id='actime'>"+data.actime+"</span> &nbsp;&nbsp</li><li>剩余票量:<span id='acnow'>"+parseInt(data.aclimit-data.acnow)+"</span></li></ul><a href='#' onclick='get_tic("+data.acid+")' id='ticket'>我要订票</a></div>"+"<div style='margin-top:70px;'>"+data.actext+"</div>");
+				//alert(data);
+		}, "json");
+			$("#close").click(function(){
+				$("#detail").fadeOut(500);
+				$("#over_layer").hide();
+			});
+		});
+	});
+	$("#info").each(function(){
+		var  temp1=this;
+		$(this).mouseover(function(){
+			$(temp1).css("box-shadow","6px 6px 3px #ccc").mouseout(function(){
+			$(temp1).css("box-shadow","4px 4px 3px #ccc");
+		});	
+	});
+	});
+	$(window).scroll(function(){
+		var top=$(window).scrollTop();
+		if(top>250){
+			$('#goTop').addClass('fixed');
+			$('#goTop').fadeIn();
+			$('#list').fadeIn();
+		}
+		else{
+			$('#goTop').removeClass('fixed');
+			$('#list').fadeOut(900);
+			$('#goTop').fadeOut();
+		}
+	})
+</script>
+<script type="text/javascript">
+$(function(){
+	var oDiv = $('.banner');
+	var oSlide = $('.slide li');
+	var oDl = $('.s-tbox');
+	var len = oSlide.length;
+	var oLi = $('.small-box li');
+	var index = 0;
+	var timer = null;
+	//oSlide.eq(0).css({'zIndex':1,'opacity':1});
+	oLi.mouseover(function(){
+		index = $(this).index();
+		next(index);
+	}).eq(0).mouseover();
+	
+	function next(index){
+		oSlide.eq(index).css('zIndex',1).stop().animate({opacity:1},300).siblings().css('zIndex','').stop().animate({opacity:0},300);
+		oDl.css('opacity',0);
+		oDl.eq(index).show().stop().animate({opacity:1},500);
+		//oLi.eq(index).addClass('active').siblings().removeClass('active');
+		oLi.eq(index).addClass('active').stop().animate({marginTop:'-18px'}).siblings().removeClass('active').stop().animate({marginTop:'0px'});
+	}
+	
+	oDiv.hover(function(){
+		clearInterval(timer);
+	},function(){
+		timer = setInterval(function(){
+			index++;
+			if(index==len){index=0;}
+			next(index);
+		},3000);
+	}).trigger('mouseleave');
+	
+})
+</script>
+<!--/footer-->
+<!--/footer-->
+<!-- SUDA_CODE_START -->
+
+<!--script type="text/javascript" charset="utf-8">
+
+(function() {
+var doc = document,
+wa = doc.createElement('script'),
+s = doc.getElementsByTagName('script')[0];
+wa.type = 'text/javascript';
+wa.charset = 'utf-8';
+wa.async = true;
+wa.src = 'http://js.t.sinajs.cn/open/analytics/js/suda.js?version=c4bc077d91fde2e7';
+s.parentNode.insertBefore(wa, s);
+})();
+
+</script-->
+
+<noscript>
+&lt;img width="0" height="0" src="http://beacon.sina.com.cn/a.gif?noScript" border="0" alt="" /&gt;
+</noscript>
+<!-- SUDA_CODE_END -->
+
+</body></html>

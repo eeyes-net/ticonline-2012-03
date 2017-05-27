@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>大屏幕后台管理系统</title>
+<!--                       CSS                       -->
+<!-- Reset Stylesheet -->
+<link rel="stylesheet" href="__TMPL__/Admin/Public/css/reset.css" type="text/css" media="screen" />
+<!-- Main Stylesheet -->
+<link rel="stylesheet" href="__TMPL__/Admin/Public/css/style.css" type="text/css" media="screen" />
+<!-- Invalid Stylesheet. This makes stuff look pretty. Remove it if you want the CSS completely valid -->
+<link rel="stylesheet" href="__TMPL__/Admin/Public/css/invalid.css" type="text/css" media="screen" />
+<!--                       Javascripts                       -->
+<!-- jQuery -->
+<script type="text/javascript" src="__TMPL__/Admin/Public/scripts/jquery-1.3.2.min.js"></script>
+<!-- jQuery Configuration -->
+<script type="text/javascript" src="__TMPL__/Admin/Public/scripts/simpla.jquery.configuration.js"></script>
+<!-- Facebox jQuery Plugin -->
+<script type="text/javascript" src="__TMPL__/Admin/Public/scripts/facebox.js"></script>
+<!-- jQuery WYSIWYG Plugin -->
+<script type="text/javascript" src="__TMPL__/Admin/Public/scripts/jquery.wysiwyg.js"></script>
+<!-- jQuery Datepicker Plugin -->
+<script type="text/javascript" src="__TMPL__/Admin/Public/scripts/jquery.datePicker.js"></script>
+<script type="text/javascript" src="__TMPL__/Admin/Public/scripts/jquery.date.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/kindeditor.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/kindeditor-zh_CN.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/ckfinder/ckfinder.js"></script>
+
+<load href="__TMPL__/Admin/Public/css/datepicker.css"/>
+
+<load href="__TMPL__/Admin/Public/scripts/datepicker.js"/>
+<load href="__TMPL__/Admin/Public/scripts/eye.js"/>
+<load href="__TMPL__/Admin/Public/scripts/utils.js"/>
+<load href="__TMPL__/Admin/Public/scripts/layout.js"/>
+<script>
+function ppp(obj) {
+	$('#acauthor').DatePicker({
+	format:'Y-m-d',
+	date: $('#acauthor').val(),
+	current: $('#acauthor').val(),
+	starts: 1,
+	position: 'r',
+	onBeforeShow: function(){
+		$('#acauthor').DatePickerSetDate($('#acauthor').val(), true);
+	},
+	onChange: function(formated, dates){
+		$('#acauthor').val(formated);
+		$('#acauthor').DatePickerHide();
+	}
+});
+}
+	
+	
+
+
+function formSubmit() {
+    actitle_ = $("[name='actitle']").attr("value");
+    aclimit_ = $("[name='aclimit']").attr("value");
+    acauthor_ = $("[name='acauthor']").attr("value");
+    acsource_ = $("[name='acsource']").attr("value");
+    actime_ = $("[name='actime']").attr("value");
+    acstart_ = $("[name='acstart']").attr("value");
+    acend_ = $("[name='acend']").attr("value");
+    actext_ = editor.document.getBody().getHtml();
+    $.ajax({
+
+    type: "POST",
+
+    data:{actitle:actitle_,aclimit:aclimit_,acauthor:acauthor_,acsource:acsource_,actime:actime_,acstart:acstart_,acend:acend_,actext:actext_},
+    
+    dataType:"json",
+    
+    url: "__URL__/insert",
+
+    
+    
+    
+    
+    beforeSend: function(XMLHttpRequest) {
+        alert("添加活动请求已发出,请稍等...");
+    },
+    
+    success: function(data, textStatus){
+        if(textStatus == 'success') {
+            alert("请求已经完成");
+        }
+        else {
+            alert("请求已经完成,不过,也许失败了...,哈哈."); 
+        }
+    }
+    });
+}
+
+function show_tab2() {
+window.editor=CKEDITOR.replace( 'actext',
+					{
+					
+								extraPlugins : 'autogrow',
+								//skin : 'office2003',
+								skin : 'kama'
+								//skin : 'v2'
+					});
+					CKFinder.setupCKEditor( editor, '__PUBLIC__/js/ckfinder/' ) ;
+$("#tab1").fadeOut("normal",function(){
+$("#tab3").fadeOut();
+$("#tab2").fadeIn();
+});
+
+}
+
+function show_tab3() {
+    $("#tab1").fadeOut("normal",function(){
+    $("#tab2").fadeOut();
+    $("#tab3").fadeIn();
+    });
+
+}
+
+
+$(document).ready(function(){
+	$(".edit").bind('click',function(){
+        $.post("__URL__/get_acinfo", {Action: "post", id: $(this).attr('id') },
+		function (data, textStatus){
+			
+				//$("article").html("<h2>"+data.actitle+"</h2>"+"<div id='achead'>主办社团:"+data.acsource+"&nbsp;&nbsp;&nbsp;发布者:"+data.acauthor+" &nbsp;&nbsp;&nbsp;活动时间:"+data.actime+" &nbsp;&nbsp;剩余票量:<span id='acnow'>"+parseInt(data.aclimit-data.acnow)+"</span><a href='#' onclick='get_tic("+data.acid+")' id='ticket'>我要订票</a></div>"+data.actext+"</p>");
+				//$("article").fadeIn();
+				$("#actitle").attr("value",data.actitle);
+				$("#aclimit").attr("value",data.aclimit);
+				$("#acauthor").attr("value",data.acauthor);
+				$("#acsource").attr("value",data.acsource);
+				$("#startDate").attr("value",data.acstart);
+				$("#endDate").attr("value",data.acend);
+				$("#actime").attr("value",data.actime);
+				
+				document.getElementById("textarea").innerHTML = data.actext;
+				$("#tab1").fadeOut("slow",function(){
+					$("#tab3").fadeOut();
+				var editor=CKEDITOR.replace( 'actext',
+					{
+					});
+					CKFinder.setupCKEditor( editor, '__PUBLIC__/js/ckfinder/' ) ;
+				$("#thisId").attr("value",data.acid);
+				$("#tab2").fadeIn();
+				});
+			
+		}, "json");
+    });
+	
+	$(".delete").bind('click',function(){
+        $.post("__URL__/delete_acinfo", {Action: "post", id: $(this).attr('id'), },
+		function (data, textStatus){
+			if(data.res == 'ok') {
+				alert("删除成功");
+			
+			}
+			else {
+				alert("删除失败");
+			
+			}
+		}, "json");
+    });
+
+});
+</script>
+<style type="text/css">
+	#tab2 form label{float:left;margin-top:5px;}
+</style>
+</head>
+
+<body style="font-family:Microsoft Yahei;">
+<div id="body-wrapper">
+  <!-- Wrapper for the radial gradient background -->
+  <div id="sidebar">
+	<p style="font-size:4em;color:#fff;text-align:center;">大屏幕</p>
+	<div style="margin-top:20px;">
+		<ul class="list_nav">
+			<li class="focus"><a href="http://piao.eeyes.net/index.php/Admin/" target="_self">首      页</a></li>
+			<?php if(session('mode')==2){echo  '<li><a href="http://piao.eeyes.net/ticonline/index.php/Stats" target="_self">数据分析</a></li>';} ?>
+			<?php if(session('mode')!=0){echo  '<li><a href="http://piao.eeyes.net/index.php/Ac/">管理活动</a></li>';} ?> 
+			<?php if(session('mode')==2){echo  '<li><a href="http://piao.eeyes.net/index.php/User/">管理帐号</a></li>';} ?> 
+			<!--li><a href="#" onClick = "show_tab3()">导出数据</a></li-->
+			<li><a href="http://piao.eeyes.net/index.php/Admin/logout"> 退出</a></li> 
+		</ul>
+	</div>
+  </div>
+  <!-- End #sidebar -->
+  <div id="main-content">
+    <!-- Main Content Section with everything -->
+    <noscript>
+    <!-- Show a notification if the user has disabled javascript -->
+    不支持js?你Out了...
+    </noscript>
+    <!-- Page Head -->
+    <?php if(session('mode')==2){echo  '<h2>欢迎来到e瞳·大屏幕系统！</h2>
+    <p id="page-intro">你想要做什么？我们现在有以下功能</p>';} ?>
+    <ul class="shortcut-buttons-set">
+    <?php if(session('mode')==2){echo  '<li><a class="shortcut-button" href="http://piao.eeyes.net/ticonline/index.php/Stats" target="_self"><span> <img src="__TMPL__Admin/Public/images/icons/stat.png" alt="icon"/><br />
+       数据分析</span></a></li>';} ?> 
+     <?php if(session('mode')!=2){echo  ' <li><a class="shortcut-button" onclick="show_tab2()" href="#"><span> <img src="__TMPL__Admin/Public/images/icons/add.png" alt="icon" /><br />
+        添加新活动</span></a></li>';} ?> 
+      <?php if(session('mode')==0){echo  '<li><a class="shortcut-button" href="http://piao.eeyes.net/index.php/Admin/" target="_self"><span> <img src="__TMPL__Admin/Public/images/icons/manage_user.png" alt="icon" /><br />
+        查看已有活动</span></a></li>';} ?> 
+	<!--li><a class="shortcut-button" href="http://piao.eeyes.net"><span> <img src="__TMPL__Admin/Public/images/icons/pencil_48.png" alt="icon" /><br />
+        访问网站首页</span></a></li-->
+       <?php if(session('mode')==2){echo  '<li><a class="shortcut-button" href="http://piao.eeyes.net/index.php/User/" target="_self"><span> <img src="__TMPL__Admin/Public/images/icons/manage_user.png" alt="icon" /><br />
+        管理帐号</span></a></li>';} ?> 
+         <?php if(session('mode')!=0){echo  '<li><a class="shortcut-button" href="http://piao.eeyes.net/index.php/Ac/" target="_self"><span> <img src="__TMPL__Admin/Public/images/icons/manage_activity.png" alt="icon" /><br />
+        管理活动</span></a></li>';} ?> 
+	<li><a  class="shortcut-button" href="#" onClick = "show_tab3()"><span> <img src="__TMPL__Admin/Public/images/icons/stat_out.png" alt="icon" /><br />
+        导出数据</span></a></li>
+        
+	
+        
+    </ul>
+    <!-- End .shortcut-buttons-set -->
+    <div class="clear"></div>
+    <!-- End .clear -->
+    <div class="content-box">
+      <!-- Start Content Box -->
+      <div class="content-box-header">
+        <h3></h3>
+        <ul class="content-box-tabs">
+          <!--<li><a href="#tab1" class="default-tab">当前活动</a></li>
+          <!-- href must be unique and match the id of target div -->
+          <!--<li><a href="#" onclick="show_tab2()">添加活动</a></li>
+        </ul>-->
+        <div class="clear"></div>
+      </div>
+      <!-- End .content-box-header -->
+      <div class="content-box-content">
+        <div class="tab-content default-tab" id="tab1">
+          <!-- This is the target div. id must match the href of this div's tab -->
+          <div class="notification attention png_bg"> <a href="#" class="close"><img src="__TMPL__/Admin/Public/images/icons/cross_grey_small.png" title="Close this notification" alt="close" /></a>
+            
+          </div>
+          
+		<table>
+            <thead>
+              <tr>
+                <th>
+                  <input class="check-all" type="checkbox" />
+                </th>
+                <th>活动名称</th>
+                <th>承办社团</th>
+				<th>发布者</th>
+                <th>总票数</th>
+                <th>已领票</th>
+				<th>活动状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td colspan="6">
+                  <div class="bulk-actions align-left">
+                    <select name="dropdown">
+                      <option value="option1">Choose an action...</option>
+                      <option value="option2">Edit</option>
+                      <option value="option3">Delete</option>
+                    </select>
+                    <a class="button" href="#">Apply to selected</a> </div>
+                  <div class="pagination"> <a href="#" title="First Page">&laquo; First</a><a href="#" title="Previous Page">&laquo; Previous</a> <a href="#" class="number" title="1">1</a> <a href="#" class="number" title="2">2</a> <a href="#" class="number current" title="3">3</a> <a href="#" class="number" title="4">4</a> <a href="#" title="Next Page">Next &raquo;</a><a href="#" title="Last Page">Last &raquo;</a> </div>
+                  <div class="clear"></div>
+                </td>
+              </tr>
+            </tfoot>
+            <tbody>
+			  <volist name="Acinfolist" id="Ac">
+              <tr>
+                <td>
+                  <input type="checkbox" />
+                </td>
+                <td>{$Ac.actitle}</td>
+                <td><a href="#" title="title">{$Ac.acsource}</a></td>
+				<td>{$Ac.acauthor}</td>
+                <td>{$Ac.aclimit}</td>
+                <td>{$Ac.acnow}</td>
+				<td>{$Ac.acallow}</td>
+                <td>
+                  <a class="edit" id="{$Ac.acid}" href="#" title="Edit"><img src="__TMPL__/Admin/Public/images/icons/pencil.png" alt="编辑活动" /></a> <a href="#" id="{$Ac.acid}" class="delete" title="Delete"><img src="__TMPL__/Admin/Public/images/icons/cross.png" alt="删除活动" /></a> </td>
+              </tr> 
+			  </volist>
+            </tbody>
+          </table>
+        </div>
+        <!-- End #tab1 -->
+        <div class="tab-content" id="tab2">
+          <form action="__URL__/insert" method="post" id = "insertForm">
+            <fieldset>
+            <!-- Set class to "column-left" or "column-right" on fieldsets to divide the form into columns -->
+            <p>
+              <label>活动名称：</label>
+              <input class="text-input small-input" type="text" id="actitle" name="actitle" value="" style="width:200px;"/>
+              <!--<span class="input-notification success png_bg">Successful message</span>
+              <!-- Classes for input-notification: success, error, information, attention -->
+              <br />
+              </p>
+            <p>
+              <label>发放票数：</label>
+              <input class="text-input medium-input datepicker" type="text" id="aclimit" name="aclimit" style="width:200px;"/>
+              <!--<span class="input-notification error png_bg">Error message</span>-->
+			  </p>
+			  	 <p>
+              <label>活动地点：</label>
+              <input class="text-input medium-input datepicker" type="text" id="acwhere" name="acwhere" value = "" style="width:200px;"/>
+			  </p>
+			  <p>
+              <label>活动类别：</label>
+              <select  id="typeid" name="typeid" />
+               <volist name="Typeinfolist" id="type">
+              <option value = "{$type.tid}">{$type.tname}</option>
+              </volist>
+              </select>
+			  </p>
+			 <p>
+              <label style="margin-top:0;">是否检票：</label>
+              <input type="radio" id="actic" name="actic" value="1" />是
+              <input  type="radio" id="actic" name="actic" value="0" />否
+			  </p>
+			 <p>
+              <label>输入发布者：</label>
+              <input class="text-input medium-input datepicker" type="text" id="acauthor" name="acauthor" style="width:200px;"/>
+              <!--<span class="input-notification error png_bg">Error message</span>-->
+			  </p>
+            <p>
+              <label>承办社团：</label>
+              <input class="text-input large-input" type="text" id="acsource" name="acsource" style="width:200px;"/>
+            </p>
+            <p>
+			放票时间:<input name="acstart" id="startDate" value="2014-01-01" />至<input name="acend" id="endDate" value="2014-01-01" />
+			  <!--活动开始时间:<input name="actime" id="acDate" value="2014-01-01" />-->
+			  <br/>
+			  活动时间:<input name="actime" id="acDate" value="2014-01-01" /><br>
+			  活动时间:<input class = "myDate" name="aime" value="2014-01-01" /><br>
+			  <!--<input onclick = "ppp(this)"></input>-->
+            </p>
+            <div>
+              <textarea id="textarea" name = "actext"></textarea>
+			</div>
+			<input type="hidden" name="acid" id="thisId" value = ""/>
+            <p>
+              <input class="button" type="submit"  value="提交"  style="background:#488fce;font-size:15px;"/>
+            </p>
+            </fieldset>
+            <div class="clear"></div>
+            <!-- End .clear -->
+          </form>
+        </div>
+        <!-- End #tab2 -->
+        <div class="tab-content" id="tab3" style="display:none;">
+          <form action="__URL__/export" method="post">
+            <fieldset>
+            <p>
+              <label>选择导出数据的活动</label>
+              <select id="dataName" name="dataName">
+              <volist name="Outinfolist" id="infoData">
+              <option value = "{$infoData.acid}">{$infoData.actitle}</option>
+              </volist>
+              </select>
+            </p>
+            <p>
+              <input class="button" type="submit" value="导出" />
+            </p>
+            </fieldset>
+            <div class="clear"></div>
+            <!-- End .clear -->
+          </form>
+        </div>
+        <!-- End #tab3 -->
+      </div>
+      <!-- End .content-box-content -->
+    </div>
+    <!-- End .content-box -->
+  <!-- End #main-content -->
+</div>
+</body>
+<!-- Download From www.exet.tk-->
+</html>
