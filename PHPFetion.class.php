@@ -71,8 +71,8 @@ class PHPFetion
 		$uri = '/im/login/inputpasssubmit1.action';
 		
 		//在以下参数中,loginstatus代表登陆状态,1-4分别为在线,忙碌,离开,隐身
-		$data = 'm='.$this->_mobile.'&pass='.urlencode($this->_password).'&loginstatus='.$this->_loginstate;
-		
+		$data = 'm='.$this->_mobile.'&pass='.urlencode($this->_password).'&loginstatus='.$this->_loginState;
+
 		$result = $this->_postWithCookie($uri, $data);
 		
 		// 解析Cookie
